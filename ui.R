@@ -1,33 +1,64 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
-
+## install.packages("shinythemes")
+library(shinythemes)
 library(shiny)
-
-# Define UI for application that draws a histogram
-shinyUI(fluidPage(
-  
-  # Application title
-  titlePanel("Old Faithful Geyser Data"),
-  
-  # Sidebar with a slider input for number of bins 
-  sidebarLayout(
-    sidebarPanel(
-       sliderInput("bins",
-                   "Number of bins:",
-                   min = 1,
-                   max = 50,
-                   value = 30)
+library(shinyWidgets)
+library(markdown)
+## Define UI for application that draws a histogram
+shinyUI(
+  navbarPage(
+    title = "Stat403",
+    theme = shinytheme("cosmo"),
+    ## first tab
+    tabPanel(
+      "Heat Map",
+      fluidPage(
+        titlePanel("Heat Map"),
+        sidebarLayout(
+          sidebarPanel(
+            ## radio buttons
+            radioButtons(
+              "att",
+              "Select Attribute",
+              choices = list("Number of Colony" = "numcol", "Yield per Colony" = "yieldpercol"
+                             , "Total Production" = "totalprod", "Price per pound" = "priceperlb")
+            ),
+            ## select input box
+            sliderInput(
+              "year",
+              "Select a year",1998,2016,1998
+            )
+          ),
+          mainPanel(
+            tabsetPanel(
+              tabPanel("Map", plotOutput("map"))
+            )
+          )
+        )
+      )
     ),
-    
-    # Show a plot of the generated distribution
-    mainPanel(
-       plotOutput("distPlot")
-    )
+    tabPanel(
+      "Time Trend",
+      fluidPage(
+        titlePanel("Time Trend"),
+        sidebarLayout(
+          sidebarPanel(
+            ## radio buttons
+            radioButtons(
+              "att1",
+              "Select Attribute",
+              choices = list("Number of Colony" = "numcol", "Yield per Colony" = "yieldpercol"
+                             , "Total Production" = "totalprod", "Price per pound" = "priceperlb")
+            )
+          ),
+          mainPanel(
+            tabsetPanel(
+              tabPanel("Map", plotOutput("anim"))
+            )
+          )
+        )
+      )
+    ),setBackgroundColor(color = c("yellow", "black"),
+                         gradient = "radial",
+                         direction = c("top"))
   )
-))
+)
